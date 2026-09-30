@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b4b">
+  <title>Dashboard | Student Task Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" type="module"></script>
+</head>
+<body class="dashboard-page" data-page="dashboard">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="dashboard.html" aria-label="Studyspace dashboard">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>Studyspace</span>
+      </a>
+      <div class="topbar-actions">
+        <span class="student-label" id="student-name">Student</span>
+        <button class="button button-quiet" id="logout-button" type="button">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <section class="welcome-row">
+      <div>
+        <p class="eyebrow" id="current-date"></p>
+        <h1>Good to see you, <span id="welcome-name">Student</span></h1>
+        <p class="welcome-subtitle">A clear plan makes a good study day.</p>
+      </div>
+      <button class="button button-primary add-task-button" id="add-task-button" type="button">
+        <span class="button-plus" aria-hidden="true">+</span> Add new task
+      </button>
+    </section>
+
+    <section class="stats-grid" aria-label="Task statistics">
+      <article class="stat-card stat-total">
+        <div class="stat-heading"><span class="stat-icon" aria-hidden="true">▤</span><span>Total tasks</span></div>
+        <p class="stat-value" id="total-count">0</p>
+        <p class="stat-caption">Across your study list</p>
+      </article>
+      <article class="stat-card stat-pending">
+        <div class="stat-heading"><span class="stat-icon" aria-hidden="true">◷</span><span>Pending</span></div>
+        <p class="stat-value" id="pending-count">0</p>
+        <p class="stat-caption">Still to be done</p>
+      </article>
+      <article class="stat-card stat-completed">
+        <div class="stat-heading"><span class="stat-icon" aria-hidden="true">✓</span><span>Completed</span></div>
+        <p class="stat-value" id="completed-count">0</p>
+        <p class="stat-caption">Tasks you have finished</p>
+      </article>
+    </section>
+
+    <section class="tasks-section" aria-labelledby="tasks-heading">
+      <div class="tasks-header">
+        <div>
+          <h2 id="tasks-heading">My tasks</h2>
+          <p class="tasks-summary" id="tasks-summary">Your academic to-do list</p>
+        </div>
+        <div class="filter-group" role="group" aria-label="Filter tasks">
+          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All tasks</button>
+          <button class="filter-button" type="button" data-filter="pending" aria-pressed="false">Pending</button>
+          <button class="filter-button" type="button" data-filter="completed" aria-pressed="false">Completed</button>
+        </div>
+      </div>
+      <div class="task-list" id="task-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <dialog class="task-dialog" id="task-dialog" aria-labelledby="task-dialog-title">
+    <form id="task-form" class="task-form">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">YOUR STUDY LIST</p>
+          <h2 id="task-dialog-title">Add a task</h2>
+        </div>
+        <button class="icon-button" id="close-dialog-button" type="button" aria-label="Close task form">×</button>
+      </div>
+      <input id="task-id" name="taskId" type="hidden">
+      <label for="task-title">Task title</label>
+      <input id="task-title" name="title" type="text" maxlength="100" placeholder="e.g. Prepare biology presentation" required>
+      <label for="task-description">Description</label>
+      <textarea id="task-description" name="description" rows="4" maxlength="500" placeholder="Add a few details about this task" required></textarea>
+      <label for="task-due-date">Due date</label>
+      <input id="task-due-date" name="dueDate" type="date" required>
+      <p class="form-error" id="task-error" role="alert" hidden></p>
+      <div class="dialog-actions">
+        <button class="button button-quiet" id="cancel-task-button" type="button">Cancel</button>
+        <button class="button button-primary" type="submit">Save task</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

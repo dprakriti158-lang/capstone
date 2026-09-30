@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b4b">
+  <title>Log in | Student Task Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" type="module"></script>
+</head>
+<body class="auth-page" data-page="login">
+  <main class="auth-layout">
+    <section class="auth-brand" aria-label="Student Task Management System">
+      <a class="brand brand-light" href="index.html" aria-label="Student Task Management System home">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>Studyspace</span>
+      </a>
+      <div class="auth-brand-copy">
+        <p class="eyebrow">STUDENT TASK MANAGEMENT SYSTEM</p>
+        <h1>Make room for what matters.</h1>
+        <p>Keep coursework, deadlines, and your next steps in one clear place.</p>
+      </div>
+      <div class="brand-footer">A little more organised, every day.</div>
+    </section>
+
+    <section class="auth-content">
+      <div class="auth-form-wrap">
+        <p class="eyebrow auth-eyebrow">WELCOME BACK</p>
+        <h2>Log in to your account</h2>
+        <p class="auth-intro">Pick up where you left off.</p>
+        <form id="login-form" class="form-stack">
+          <label for="login-email">Email address</label>
+          <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@university.edu" required>
+
+          <label for="login-password">Password</label>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+
+          <p class="form-error" id="login-error" role="alert" hidden></p>
+          <button class="button button-primary button-wide" type="submit">Log in</button>
+        </form>
+        <p class="auth-switch">New to Studyspace? <a href="register.html">Create an account</a></p>
+      </div>
+      <footer class="auth-footer">Student Task Management System</footer>
+    </section>
+  </main>
+</body>
+</html>

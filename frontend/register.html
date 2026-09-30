@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b4b">
+  <title>Create account | Student Task Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" type="module"></script>
+</head>
+<body class="auth-page" data-page="register">
+  <main class="auth-layout">
+    <section class="auth-brand" aria-label="Student Task Management System">
+      <a class="brand brand-light" href="index.html" aria-label="Student Task Management System home">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>Studyspace</span>
+      </a>
+      <div class="auth-brand-copy">
+        <p class="eyebrow">STUDENT TASK MANAGEMENT SYSTEM</p>
+        <h1>Start with a clear plan.</h1>
+        <p>One simple space to keep your academic tasks moving forward.</p>
+      </div>
+      <div class="brand-footer">A little more organised, every day.</div>
+    </section>
+
+    <section class="auth-content">
+      <div class="auth-form-wrap">
+        <p class="eyebrow auth-eyebrow">GET STARTED</p>
+        <h2>Create your account</h2>
+        <p class="auth-intro">Set up your student workspace.</p>
+        <form id="register-form" class="form-stack">
+          <label for="register-name">Full name</label>
+          <input id="register-name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+
+          <label for="register-email">Email address</label>
+          <input id="register-email" name="email" type="email" autocomplete="email" placeholder="you@university.edu" required>
+
+          <label for="register-password">Password</label>
+          <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="6" placeholder="At least 6 characters" required>
+
+          <label for="register-confirm-password">Confirm password</label>
+          <input id="register-confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Enter your password again" required>
+
+          <p class="form-error" id="register-error" role="alert" hidden></p>
+          <button class="button button-primary button-wide" type="submit">Create account</button>
+        </form>
+        <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+      </div>
+      <footer class="auth-footer">Student Task Management System</footer>
+    </section>
+  </main>
+</body>
+</html>
