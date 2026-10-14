@@ -121,7 +121,8 @@ function normalizeTask(task) {
     title: task.title,
     description: task.description,
     dueDate: task.dueDate.slice(0, 10),
-    status: task.status.toLowerCase()
+    status: task.status.toLowerCase(),
+    isShared: task.isShared
   };
 }
 
@@ -182,6 +183,8 @@ async function initializeDashboard(user) {
           </div>
           <div class="task-actions">
             <button class="task-action task-action-complete" type="button" data-action="toggle">${isCompleted ? "Reopen" : "Complete"}</button>
+            <button class="task-action" type="button" data-action="share">${task.isShared ? "Copy link" : "Share"}</button>
+            ${task.isShared ? '<button class="task-action task-action-delete" type="button" data-action="stop-sharing">Stop sharing</button>' : ""}
             <button class="task-action" type="button" data-action="edit">Edit</button>
             <button class="task-action task-action-delete" type="button" data-action="delete">Delete</button>
           </div>
@@ -240,6 +243,24 @@ async function initializeDashboard(user) {
           await apiRequest(`/api/tasks/${encodeURIComponent(task.id)}/complete`, { method: "PATCH" });
         }
         await loadTasks();
+      } else if (actionButton.dataset.action === "share") {
+        const result = await apiRequest(`/api/tasks/${encodeURIComponent(task.id)}/share`, { method: "POST" });
+        const shareUrl = new URL(`share.html?token=${encodeURIComponent(result.token)}`, window.location.href).href;
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          window.alert("Public task link copied to your clipboard.");
+        } catch {
+          window.prompt("Copy this public task link:", shareUrl);
+        }
+        task.isShared = true;
+        renderTasks();
+      } else if (actionButton.dataset.action === "stop-sharing") {
+        if (!window.confirm("Anyone with this link will no longer be able to view the task. Stop sharing?")) {
+          return;
+        }
+        await apiRequest(`/api/tasks/${encodeURIComponent(task.id)}/share`, { method: "DELETE" });
+        task.isShared = false;
+        renderTasks();
       }
     } catch (requestError) {
       window.alert(requestError.message);

@@ -4,11 +4,12 @@ const cors = require("cors");
 const express = require("express");
 const { db } = require("./config/firebase");
 const authRoutes = require("./routes/authRoutes");
+const shareRoutes = require("./routes/shareRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
-const allowedOrigins = (process.env.FRONTEND_ORIGIN || "http://localhost:5500")
+const allowedOrigins = (process.env.FRONTEND_ORIGIN || "http://localhost:5500,http://127.0.0.1:5500")
   .split(",")
   .map((origin) => origin.trim());
 
@@ -35,6 +36,7 @@ app.get("/api/health/database", async (req, res) => {
   }
 });
 app.use("/api/auth", authRoutes);
+app.use("/api/shares", shareRoutes);
 app.use("/api/tasks", taskRoutes);
 
 app.use((req, res) => {

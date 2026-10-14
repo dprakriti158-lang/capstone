@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b4b">
+  <meta name="referrer" content="no-referrer">
+  <title>Shared task | Studyspace</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="share.js" type="module"></script>
+</head>
+<body class="shared-task-page">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="Studyspace home">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>Studyspace</span>
+      </a>
+      <a class="button button-quiet" href="login.html">Create your own plan</a>
+    </div>
+  </header>
+
+  <main class="shared-task-main">
+    <section class="shared-task-card" aria-labelledby="shared-task-title">
+      <p class="eyebrow">SHARED STUDY TASK</p>
+      <p class="shared-task-message" id="shared-task-message" role="status">Loading shared task…</p>
+      <div id="shared-task-content" hidden>
+        <div class="task-title-line">
+          <h1 class="shared-task-title" id="shared-task-title"></h1>
+          <span class="status-pill" id="shared-task-status"></span>
+        </div>
+        <p class="task-description shared-task-description" id="shared-task-description"></p>
+        <p class="shared-task-due" id="shared-task-due"></p>
+        <p class="shared-task-note">This task was shared publicly. Anyone with this link can view it.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

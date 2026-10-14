@@ -613,6 +613,50 @@ button {
   gap: 8px;
   margin-top: 12px;
 }
+.shared-task-page {
+  background: var(--page);
+}
+.shared-task-main {
+  width: min(720px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 72px 0;
+}
+.shared-task-card {
+  padding: clamp(22px, 5vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 12px 35px rgb(20 40 29 / 5%);
+}
+.shared-task-title {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.shared-task-description {
+  max-width: none;
+  margin-top: 20px;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+.shared-task-due {
+  margin: 17px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.shared-task-note {
+  margin: 28px 0 0;
+  padding-top: 17px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+.shared-task-message {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
 
 @media (max-width: 760px) {
   .auth-layout {

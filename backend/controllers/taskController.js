@@ -1,4 +1,5 @@
 const { db } = require("../config/firebase");
+const { randomBytes } = require("node:crypto");
 
 const VALID_STATUSES = new Map([
   ["pending", "Pending"],
@@ -45,9 +46,11 @@ function validateTask(body, allowDefaultStatus = false) {
 
 function serializeTask(document) {
   const task = document.data();
+  const { shareToken, ...taskData } = task;
   return {
     taskId: document.id,
-    ...task,
+    ...taskData,
+    isShared: typeof shareToken === "string" && shareToken.length > 0,
     createdAt: task.createdAt && typeof task.createdAt.toDate === "function"
       ? task.createdAt.toDate().toISOString()
       : task.createdAt || null
@@ -100,12 +103,23 @@ async function updateTask(req, res) {
 
 async function deleteTask(req, res) {
   const taskRef = tasksForUser(req.user.uid).doc(req.params.taskId);
-  const task = await taskRef.get();
-  if (!task.exists) {
+  const taskExists = await db.runTransaction(async (transaction) => {
+    const task = await transaction.get(taskRef);
+    if (!task.exists) {
+      return false;
+    }
+
+    const token = task.get("shareToken");
+    transaction.delete(taskRef);
+    if (typeof token === "string" && token) {
+      transaction.delete(db.collection("publicShares").doc(token));
+    }
+    return true;
+  });
+  if (!taskExists) {
     return res.status(404).json({ error: "Task not found." });
   }
 
-  await taskRef.delete();
   return res.status(200).json({ message: "Task deleted." });
 }
 
@@ -120,4 +134,72 @@ async function completeTask(req, res) {
   return res.status(200).json(serializeTask(await taskRef.get()));
 }
 
-module.exports = { createTask, getTasks, getTask, updateTask, deleteTask, completeTask };
+async function createTaskShare(req, res) {
+  const taskRef = tasksForUser(req.user.uid).doc(req.params.taskId);
+  let token;
+
+  const taskExists = await db.runTransaction(async (transaction) => {
+    const task = await transaction.get(taskRef);
+    if (!task.exists) {
+      return false;
+    }
+
+    const existingToken = task.get("shareToken");
+    if (typeof existingToken === "string" && existingToken) {
+      const existingShareRef = db.collection("publicShares").doc(existingToken);
+      const existingShare = await transaction.get(existingShareRef);
+      if (existingShare.exists) {
+        token = existingToken;
+        return true;
+      }
+    }
+
+    token = randomBytes(32).toString("base64url");
+    transaction.update(taskRef, { shareToken: token });
+    transaction.set(db.collection("publicShares").doc(token), {
+      userId: req.user.uid,
+      taskId: req.params.taskId,
+      createdAt: new Date()
+    });
+    return true;
+  });
+
+  if (!taskExists) {
+    return res.status(404).json({ error: "Task not found." });
+  }
+  return res.status(200).json({ token });
+}
+
+async function revokeTaskShare(req, res) {
+  const taskRef = tasksForUser(req.user.uid).doc(req.params.taskId);
+
+  const taskExists = await db.runTransaction(async (transaction) => {
+    const task = await transaction.get(taskRef);
+    if (!task.exists) {
+      return false;
+    }
+
+    const token = task.get("shareToken");
+    if (typeof token === "string" && token) {
+      transaction.delete(db.collection("publicShares").doc(token));
+      transaction.update(taskRef, { shareToken: null });
+    }
+    return true;
+  });
+
+  if (!taskExists) {
+    return res.status(404).json({ error: "Task not found." });
+  }
+  return res.status(200).json({ message: "Public link disabled." });
+}
+
+module.exports = {
+  createTask,
+  getTasks,
+  getTask,
+  updateTask,
+  deleteTask,
+  completeTask,
+  createTaskShare,
+  revokeTaskShare
+};

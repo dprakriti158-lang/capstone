@@ -71,8 +71,15 @@ All task endpoints require `Authorization: Bearer <Firebase_ID_TOKEN>`.
 | PUT | `/api/tasks/:taskId` | Update a task |
 | DELETE | `/api/tasks/:taskId` | Delete a task |
 | PATCH | `/api/tasks/:taskId/complete` | Mark a task `Completed` |
+| POST | `/api/tasks/:taskId/share` | Create or retrieve a public link for a task |
+| DELETE | `/api/tasks/:taskId/share` | Revoke a task's public link |
+| GET | `/api/shares/:token` | Get the task shared by a public link (no login required) |
 
 Tasks are stored at `users/{userId}/tasks/{taskId}` with `title`, `description`, `dueDate`, `status`, and `createdAt`. The user profile is stored at `users/{userId}`.
+
+Public task links use an unguessable token stored in `publicShares/{token}`. Anyone with the link can view only that task; the owner can disable the link from the dashboard. Shared task details are served through the backend and do not require changing Firestore security rules.
+
+The shared URL uses the frontend's current host. Links created on `localhost` or `127.0.0.1` are only for local testing; deploy the frontend and API and configure `API_BASE_URL` and `FRONTEND_ORIGIN` for links that other people can open.
 
 ## Frontend Connection
 
@@ -95,3 +102,5 @@ Registration and login use Firebase Authentication in the existing JavaScript. T
 6. Edit the task, mark it completed, then delete it.
 7. Confirm the task is updated and then removed from Firestore.
 8. Send a task API request without an Authorization header and confirm it receives HTTP 401.
+9. Share a task, open its link in a signed-out/private browser window, and confirm the task is visible.
+10. Disable the public link and confirm it no longer loads.

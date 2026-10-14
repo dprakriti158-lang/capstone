@@ -7,6 +7,8 @@ const router = express.Router();
 router.use(authenticateFirebaseToken);
 router.post("/", taskController.createTask);
 router.get("/", taskController.getTasks);
+router.post("/:taskId/share", taskController.createTaskShare);
+router.delete("/:taskId/share", taskController.revokeTaskShare);
 router.get("/:taskId", taskController.getTask);
 router.put("/:taskId", taskController.updateTask);
 router.delete("/:taskId", taskController.deleteTask);
